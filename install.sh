@@ -15,6 +15,7 @@
 
 set -ex
 
+git clone -b $(curl -L https://grpc.io/release) https://github.com/grpc/grpc
 source ~/.bashrc
 cd "$(dirname "$0")/../../.."
 
@@ -57,7 +58,7 @@ rm -rf third_party/protobuf  # wipe out to prevent influencing the grpc build
 mkdir -p cmake/build
 cd cmake/build
 cmake -DgRPC_INSTALL=ON -DCMAKE_PREFIX_PATH=${LOCAL}/usr/local -DgRPC_BUILD_TESTS=OFF -DgRPC_PROTOBUF_PROVIDER=package -DgRPC_ZLIB_PROVIDER=package -DgRPC_CARES_PROVIDER=package -DgRPC_SSL_PROVIDER=package -DCMAKE_BUILD_TYPE=Release ../..
-make -j24 install
+make -j24 DESTDIR=${LOCAL} install
 cd ../..
 
 # Build helloworld example using cmake
@@ -65,4 +66,4 @@ cd examples/cpp/helloworld
 mkdir -p cmake/build
 cd cmake/build
 cmake -DCMAKE_PREFIX_PATH=${LOCAL}/usr/local -DgRPC_DIR=${LOCAL}/lib/cmake/grpc ../..
-make
+make -j24
