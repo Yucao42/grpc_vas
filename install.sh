@@ -16,6 +16,7 @@
 set -ex
 
 git clone -b $(curl -L https://grpc.io/release) https://github.com/grpc/grpc
+git submodule update --init --recursive
 source ~/.bashrc
 cd "$(dirname "$0")/../../.."
 
