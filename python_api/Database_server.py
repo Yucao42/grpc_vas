@@ -34,7 +34,7 @@ class QueryHandler(Database_pb2_grpc.QueryHandlerServicer):
         query=    request.query
         center=   request.center
         print(num_query, center)
-        return Database_pb2.QueryReply(status='OK', indexes=[i for i in range(num_query)])
+        return Database_pb2.QueryReply(status='OK', indexes = [i for i in range(num_query)])
 
 
 def serve():

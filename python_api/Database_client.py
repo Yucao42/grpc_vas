@@ -18,20 +18,24 @@ import logging
 
 import grpc
 
-import helloworld_pb2
-import helloworld_pb2_grpc
+import Database_pb2
+import Database_pb2_grpc
 
 
 def run():
     # NOTE(gRPC Python Team): .close() is possible on a channel and should be
     # used in circumstances in which the with statement does not fit the needs
     # of the code.
-    data = [i for i in range(14)]
+    frame_id = 1
+    cls_id = 0
     num_query = 2
+    d = 512
+    query = [i for i in range(d * num_query)]
+    center = [i for i in range(2 * num_query)]
     with grpc.insecure_channel('localhost:50051') as channel:
-        stub = helloworld_pb2_grpc.GreeterStub(channel)
-        response = stub.SayHello(helloworld_pb2.HelloRequest(name='you', num_query=2, query=data))
-    print("Greeter client received: " + response.message)
+        stub = Database_pb2_grpc.QueryHandlerStub(channel)
+        response = stub.QueryInsert(Database_pb2.QueryRequest(frame_id=frame_id, cls_id=cls_id, num_query=num_query, query=query, center=center))
+    print("Greeter client received: " + response.status)
 
 
 if __name__ == '__main__':
