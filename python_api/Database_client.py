@@ -22,6 +22,11 @@ import Database_pb2
 import Database_pb2_grpc
 
 
+def Database_client(remote='localhost', port='50051'):
+    channel = grpc.insecure_channel(f'{remote}:{port}')
+    stub = Database_pb2_grpc.QueryHandlerStub(channel)
+    return stub
+
 def run(remote='localhost', port='50051'):
     # NOTE(gRPC Python Team): .close() is possible on a channel and should be
     # used in circumstances in which the with statement does not fit the needs
