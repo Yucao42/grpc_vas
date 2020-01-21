@@ -23,25 +23,25 @@
 #include <grpcpp/grpcpp.h>
 
 #ifdef BAZEL_BUILD
-#include "examples/protos/helloworld.grpc.pb.h"
+#include "examples/protos/Database.grpc.pb.h"
 #else
-#include "helloworld.grpc.pb.h"
+#include "Database.grpc.pb.h"
 #endif
 
 using grpc::Server;
 using grpc::ServerBuilder;
 using grpc::ServerContext;
 using grpc::Status;
-using helloworld::HelloRequest;
-using helloworld::HelloReply;
-using helloworld::Greeter;
+using Database::QueryRequest;
+using Database::QueryReply;
+using Database::QueryHandler;
 
 // Logic and data behind the server's behavior.
-class GreeterServiceImpl final : public Greeter::Service {
-  Status SayHello(ServerContext* context, const HelloRequest* request,
-                  HelloReply* reply) override {
+class QueryHandlerServiceImpl final : public QueryHandler::Service {
+  Status QueryInsert(ServerContext* context, const QueryRequest* request,
+                  QueryReply* reply) override {
     std::string prefix("Hello ");
-	int d = 7;
+	int d = 512;
 	int num_query = request -> num_query();
 
 	for(long i = 0; i < num_query; i++) {
@@ -49,14 +49,24 @@ class GreeterServiceImpl final : public Greeter::Service {
 	    	std::cout<< "Received "  << request -> query(d * i + j) << std::endl;
 	}
 
-    reply->set_message(prefix + request->name());
+	for(long i = 0; i < num_query; i++) {
+		for(long j = 0; j < 2; j++)
+	    	std::cout<< "Received "  << request -> center(2 * i + j) << std::endl;
+	}
+    reply->set_status("OK");
+
+	auto indexes = reply -> mutable_indexes();
+	indexes -> Reserve(num_query);
+	for(long i = 0; i < num_query; i++) {
+		reply -> add_indexes(i);
+	}
     return Status::OK;
   }
 };
 
 void RunServer() {
   std::string server_address("0.0.0.0:50051");
-  GreeterServiceImpl service;
+  QueryHandlerServiceImpl service;
 
   ServerBuilder builder;
   // Listen on the given address without any authentication mechanism.

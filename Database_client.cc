@@ -24,37 +24,40 @@
 #include <grpcpp/grpcpp.h>
 
 #ifdef BAZEL_BUILD
-#include "examples/protos/helloworld.grpc.pb.h"
+#include "examples/protos/Database.grpc.pb.h"
 #else
-#include "helloworld.grpc.pb.h"
+#include "Database.grpc.pb.h"
 #endif
 
 using grpc::Channel;
 using grpc::ClientContext;
 using grpc::Status;
-using helloworld::HelloRequest;
-using helloworld::HelloReply;
-using helloworld::Greeter;
+using Database::QueryRequest;
+using Database::QueryReply;
+using Database::QueryHandler;
 
-class GreeterClient {
+class QueryHandlerClient {
  public:
-  GreeterClient(std::shared_ptr<Channel> channel)
-      : stub_(Greeter::NewStub(channel)) {}
+  QueryHandlerClient(std::shared_ptr<Channel> channel)
+      : stub_(QueryHandler::NewStub(channel)) {}
 
   // Assembles the client's payload, sends it and presents the response back
   // from the server.
-  std::string SayHello(const std::string& user) {
+  std::string QueryInsert(const std::string& user) {
     // Data we are sending to the server.
-    HelloRequest request;
-    request.set_name(user);
+    QueryRequest request;
+    request.set_frame_id(1);
+    request.set_cls_id(0);
 
 	// Yu: RANDOM intialize some data
-	int d = 7, nq = 2;
+	int d = 512, nq = 2;
     request.set_num_query(nq);
 	float *xq = new float[d * nq];
 
 	auto query = request.mutable_query();
+	auto center = request.mutable_center();
 	query -> Reserve(d * nq);
+	center -> Reserve(2 * nq);
 
 	for(long i = 0; i < nq; i++) {
 		for(long j = 0; j < d; j++)
@@ -66,24 +69,25 @@ class GreeterClient {
 		{
 	    	request.add_query(xq[d * i + j]);
 	    	std::cout<< "Prepared "  << request.query(d * i + j) << std::endl;
-
+			if (j < 2)
+	    		request.add_center(xq[2 * i + j]);
 		}
 	    	// query -> AddAllocated(xq + d * i + j); // AddAllocated
 	}
 
     // Container for the data we expect from the server.
-    HelloReply reply;
+    QueryReply reply;
 
     // Context for the client. It could be used to convey extra information to
     // the server and/or tweak certain RPC behaviors.
     ClientContext context;
 
     // The actual RPC.
-    Status status = stub_->SayHello(&context, request, &reply);
+    Status status = stub_->QueryInsert(&context, request, &reply);
 
     // Act upon its status.
     if (status.ok()) {
-      return reply.message();
+      return reply.status();
     } else {
       std::cout << status.error_code() << ": " << status.error_message()
                 << std::endl;
@@ -92,7 +96,7 @@ class GreeterClient {
   }
 
  private:
-  std::unique_ptr<Greeter::Stub> stub_;
+  std::unique_ptr<QueryHandler::Stub> stub_;
 };
 
 int main(int argc, char** argv) {
@@ -100,10 +104,10 @@ int main(int argc, char** argv) {
   // are created. This channel models a connection to an endpoint (in this case,
   // localhost at port 50051). We indicate that the channel isn't authenticated
   // (use of InsecureChannelCredentials()).
-  GreeterClient greeter(grpc::CreateChannel(
+  QueryHandlerClient querier(grpc::CreateChannel(
       "localhost:50051", grpc::InsecureChannelCredentials()));
   std::string user("world");
-  std::string reply = greeter.SayHello(user);
+  std::string reply = querier.QueryInsert(user);
   std::cout << "Greeter received: " << reply << std::endl;
 
   return 0;
