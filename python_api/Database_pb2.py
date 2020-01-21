@@ -20,7 +20,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   package='Database',
   syntax='proto3',
   serialized_options=_b('\242\002\003HLW'),
-  serialized_pb=_b('\n\x0e\x44\x61tabase.proto\x12\x08\x44\x61tabase\"b\n\x0cQueryRequest\x12\x10\n\x08\x66rame_id\x18\x01 \x01(\x05\x12\x0e\n\x06\x63ls_id\x18\x02 \x01(\x05\x12\x11\n\tnum_query\x18\x03 \x01(\x05\x12\r\n\x05query\x18\x04 \x03(\x02\x12\x0e\n\x06\x63\x65nter\x18\x05 \x03(\x02\"-\n\nQueryReply\x12\x0e\n\x06status\x18\x01 \x01(\t\x12\x0f\n\x07indexes\x18\x02 \x03(\x02\x32\x86\x01\n\x0cQueryHandler\x12\x37\n\x05Query\x12\x16.Database.QueryRequest\x1a\x14.Database.QueryReply\"\x00\x12=\n\x0bQueryInsert\x12\x16.Database.QueryRequest\x1a\x14.Database.QueryReply\"\x00\x42\x06\xa2\x02\x03HLWb\x06proto3')
+  serialized_pb=_b('\n\x0e\x44\x61tabase.proto\x12\x08\x44\x61tabase\"b\n\x0cQueryRequest\x12\x10\n\x08\x66rame_id\x18\x01 \x01(\x05\x12\x0e\n\x06\x63ls_id\x18\x02 \x01(\x05\x12\x11\n\tnum_query\x18\x03 \x01(\x05\x12\r\n\x05query\x18\x04 \x03(\x02\x12\x0e\n\x06\x63\x65nter\x18\x05 \x03(\x02\"-\n\nQueryReply\x12\x0e\n\x06status\x18\x01 \x01(\t\x12\x0f\n\x07indexes\x18\x02 \x03(\x05\x32\x86\x01\n\x0cQueryHandler\x12\x37\n\x05Query\x12\x16.Database.QueryRequest\x1a\x14.Database.QueryReply\"\x00\x12=\n\x0bQueryInsert\x12\x16.Database.QueryRequest\x1a\x14.Database.QueryReply\"\x00\x42\x06\xa2\x02\x03HLWb\x06proto3')
 )
 
 
@@ -101,7 +101,7 @@ _QUERYREPLY = _descriptor.Descriptor(
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='indexes', full_name='Database.QueryReply.indexes', index=1,
-      number=2, type=2, cpp_type=6, label=3,
+      number=2, type=5, cpp_type=1, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,

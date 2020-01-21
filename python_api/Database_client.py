@@ -22,7 +22,7 @@ import Database_pb2
 import Database_pb2_grpc
 
 
-def run():
+def run(remote='localhost', port='50051'):
     # NOTE(gRPC Python Team): .close() is possible on a channel and should be
     # used in circumstances in which the with statement does not fit the needs
     # of the code.
@@ -32,10 +32,10 @@ def run():
     d = 512
     query = [i for i in range(d * num_query)]
     center = [i for i in range(2 * num_query)]
-    with grpc.insecure_channel('localhost:50051') as channel:
+    with grpc.insecure_channel(f'{remote}:{port}') as channel:
         stub = Database_pb2_grpc.QueryHandlerStub(channel)
         response = stub.QueryInsert(Database_pb2.QueryRequest(frame_id=frame_id, cls_id=cls_id, num_query=num_query, query=query, center=center))
-    print("Greeter client received: " + response.status)
+    print("Greeter client received: " + response.status, response.indexes)
 
 
 if __name__ == '__main__':

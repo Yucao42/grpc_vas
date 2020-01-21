@@ -40,6 +40,6 @@ message QueryRequest {
 // The response message containing the greetings
 message QueryReply {
   string status = 1;
-  repeated float indexes = 2;
+  repeated int32 indexes = 2;
 }
 
