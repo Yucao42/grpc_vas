@@ -23,6 +23,7 @@ import Database_pb2_grpc
 
 
 def Database_client(remote='localhost', port='50051'):
+    print('Address ', f'{remote}:{port}')
     channel = grpc.insecure_channel(f'{remote}:{port}')
     stub = Database_pb2_grpc.QueryHandlerStub(channel)
     return stub
