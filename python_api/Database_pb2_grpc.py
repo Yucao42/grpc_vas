@@ -24,6 +24,16 @@ class QueryHandlerStub(object):
         request_serializer=Database__pb2.QueryRequest.SerializeToString,
         response_deserializer=Database__pb2.QueryReply.FromString,
         )
+    self.QueryInsertTimeStamp = channel.unary_unary(
+        '/Database.QueryHandler/QueryInsertTimeStamp',
+        request_serializer=Database__pb2.QueryRequestTimeStamp.SerializeToString,
+        response_deserializer=Database__pb2.QueryReply.FromString,
+        )
+    self.QueryInsertFrameID = channel.unary_unary(
+        '/Database.QueryHandler/QueryInsertFrameID',
+        request_serializer=Database__pb2.QueryRequestFrameID.SerializeToString,
+        response_deserializer=Database__pb2.QueryReply.FromString,
+        )
 
 
 class QueryHandlerServicer(object):
@@ -44,6 +54,20 @@ class QueryHandlerServicer(object):
     context.set_details('Method not implemented!')
     raise NotImplementedError('Method not implemented!')
 
+  def QueryInsertTimeStamp(self, request, context):
+    # missing associated documentation comment in .proto file
+    pass
+    context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+    context.set_details('Method not implemented!')
+    raise NotImplementedError('Method not implemented!')
+
+  def QueryInsertFrameID(self, request, context):
+    # missing associated documentation comment in .proto file
+    pass
+    context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+    context.set_details('Method not implemented!')
+    raise NotImplementedError('Method not implemented!')
+
 
 def add_QueryHandlerServicer_to_server(servicer, server):
   rpc_method_handlers = {
@@ -55,6 +79,16 @@ def add_QueryHandlerServicer_to_server(servicer, server):
       'QueryInsert': grpc.unary_unary_rpc_method_handler(
           servicer.QueryInsert,
           request_deserializer=Database__pb2.QueryRequest.FromString,
+          response_serializer=Database__pb2.QueryReply.SerializeToString,
+      ),
+      'QueryInsertTimeStamp': grpc.unary_unary_rpc_method_handler(
+          servicer.QueryInsertTimeStamp,
+          request_deserializer=Database__pb2.QueryRequestTimeStamp.FromString,
+          response_serializer=Database__pb2.QueryReply.SerializeToString,
+      ),
+      'QueryInsertFrameID': grpc.unary_unary_rpc_method_handler(
+          servicer.QueryInsertFrameID,
+          request_deserializer=Database__pb2.QueryRequestFrameID.FromString,
           response_serializer=Database__pb2.QueryReply.SerializeToString,
       ),
   }

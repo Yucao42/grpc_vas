@@ -20,7 +20,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   package='Database',
   syntax='proto3',
   serialized_options=_b('\242\002\003HLW'),
-  serialized_pb=_b('\n\x0e\x44\x61tabase.proto\x12\x08\x44\x61tabase\"b\n\x0cQueryRequest\x12\x10\n\x08\x66rame_id\x18\x01 \x01(\x05\x12\x0e\n\x06\x63ls_id\x18\x02 \x01(\x05\x12\x11\n\tnum_query\x18\x03 \x01(\x05\x12\r\n\x05query\x18\x04 \x03(\x02\x12\x0e\n\x06\x63\x65nter\x18\x05 \x03(\x02\"-\n\nQueryReply\x12\x0e\n\x06status\x18\x01 \x01(\t\x12\x0f\n\x07indexes\x18\x02 \x03(\x05\x32\x86\x01\n\x0cQueryHandler\x12\x37\n\x05Query\x12\x16.Database.QueryRequest\x1a\x14.Database.QueryReply\"\x00\x12=\n\x0bQueryInsert\x12\x16.Database.QueryRequest\x1a\x14.Database.QueryReply\"\x00\x42\x06\xa2\x02\x03HLWb\x06proto3')
+  serialized_pb=_b('\n\x0e\x44\x61tabase.proto\x12\x08\x44\x61tabase\"b\n\x0cQueryRequest\x12\x10\n\x08\x66rame_id\x18\x01 \x01(\x05\x12\x0e\n\x06\x63ls_id\x18\x02 \x01(\x05\x12\x11\n\tnum_query\x18\x03 \x01(\x05\x12\r\n\x05query\x18\x04 \x03(\x02\x12\x0e\n\x06\x63\x65nter\x18\x05 \x03(\x02\"&\n\tTimeStamp\x12\x0b\n\x03sec\x18\x01 \x01(\x03\x12\x0c\n\x04usec\x18\x02 \x01(\x03\"o\n\x15QueryRequestTimeStamp\x12\x11\n\tserver_id\x18\x01 \x01(\x05\x12\x1f\n\x02ts\x18\x02 \x01(\x0b\x32\x13.Database.TimeStamp\x12\"\n\x02qr\x18\x03 \x01(\x0b\x32\x16.Database.QueryRequest\"^\n\x13QueryRequestFrameID\x12\x11\n\tserver_id\x18\x01 \x01(\x05\x12\x10\n\x08\x66rame_id\x18\x02 \x01(\x05\x12\"\n\x02qr\x18\x03 \x01(\x0b\x32\x16.Database.QueryRequest\"-\n\nQueryReply\x12\x0e\n\x06status\x18\x01 \x01(\t\x12\x0f\n\x07indexes\x18\x02 \x03(\x05\x32\xa4\x02\n\x0cQueryHandler\x12\x37\n\x05Query\x12\x16.Database.QueryRequest\x1a\x14.Database.QueryReply\"\x00\x12=\n\x0bQueryInsert\x12\x16.Database.QueryRequest\x1a\x14.Database.QueryReply\"\x00\x12O\n\x14QueryInsertTimeStamp\x12\x1f.Database.QueryRequestTimeStamp\x1a\x14.Database.QueryReply\"\x00\x12K\n\x12QueryInsertFrameID\x12\x1d.Database.QueryRequestFrameID\x1a\x14.Database.QueryReply\"\x00\x42\x06\xa2\x02\x03HLWb\x06proto3')
 )
 
 
@@ -85,6 +85,134 @@ _QUERYREQUEST = _descriptor.Descriptor(
 )
 
 
+_TIMESTAMP = _descriptor.Descriptor(
+  name='TimeStamp',
+  full_name='Database.TimeStamp',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='sec', full_name='Database.TimeStamp.sec', index=0,
+      number=1, type=3, cpp_type=2, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='usec', full_name='Database.TimeStamp.usec', index=1,
+      number=2, type=3, cpp_type=2, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=128,
+  serialized_end=166,
+)
+
+
+_QUERYREQUESTTIMESTAMP = _descriptor.Descriptor(
+  name='QueryRequestTimeStamp',
+  full_name='Database.QueryRequestTimeStamp',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='server_id', full_name='Database.QueryRequestTimeStamp.server_id', index=0,
+      number=1, type=5, cpp_type=1, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='ts', full_name='Database.QueryRequestTimeStamp.ts', index=1,
+      number=2, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='qr', full_name='Database.QueryRequestTimeStamp.qr', index=2,
+      number=3, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=168,
+  serialized_end=279,
+)
+
+
+_QUERYREQUESTFRAMEID = _descriptor.Descriptor(
+  name='QueryRequestFrameID',
+  full_name='Database.QueryRequestFrameID',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='server_id', full_name='Database.QueryRequestFrameID.server_id', index=0,
+      number=1, type=5, cpp_type=1, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='frame_id', full_name='Database.QueryRequestFrameID.frame_id', index=1,
+      number=2, type=5, cpp_type=1, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='qr', full_name='Database.QueryRequestFrameID.qr', index=2,
+      number=3, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=281,
+  serialized_end=375,
+)
+
+
 _QUERYREPLY = _descriptor.Descriptor(
   name='QueryReply',
   full_name='Database.QueryReply',
@@ -118,11 +246,17 @@ _QUERYREPLY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=128,
-  serialized_end=173,
+  serialized_start=377,
+  serialized_end=422,
 )
 
+_QUERYREQUESTTIMESTAMP.fields_by_name['ts'].message_type = _TIMESTAMP
+_QUERYREQUESTTIMESTAMP.fields_by_name['qr'].message_type = _QUERYREQUEST
+_QUERYREQUESTFRAMEID.fields_by_name['qr'].message_type = _QUERYREQUEST
 DESCRIPTOR.message_types_by_name['QueryRequest'] = _QUERYREQUEST
+DESCRIPTOR.message_types_by_name['TimeStamp'] = _TIMESTAMP
+DESCRIPTOR.message_types_by_name['QueryRequestTimeStamp'] = _QUERYREQUESTTIMESTAMP
+DESCRIPTOR.message_types_by_name['QueryRequestFrameID'] = _QUERYREQUESTFRAMEID
 DESCRIPTOR.message_types_by_name['QueryReply'] = _QUERYREPLY
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
 
@@ -132,6 +266,27 @@ QueryRequest = _reflection.GeneratedProtocolMessageType('QueryRequest', (_messag
   # @@protoc_insertion_point(class_scope:Database.QueryRequest)
   })
 _sym_db.RegisterMessage(QueryRequest)
+
+TimeStamp = _reflection.GeneratedProtocolMessageType('TimeStamp', (_message.Message,), {
+  'DESCRIPTOR' : _TIMESTAMP,
+  '__module__' : 'Database_pb2'
+  # @@protoc_insertion_point(class_scope:Database.TimeStamp)
+  })
+_sym_db.RegisterMessage(TimeStamp)
+
+QueryRequestTimeStamp = _reflection.GeneratedProtocolMessageType('QueryRequestTimeStamp', (_message.Message,), {
+  'DESCRIPTOR' : _QUERYREQUESTTIMESTAMP,
+  '__module__' : 'Database_pb2'
+  # @@protoc_insertion_point(class_scope:Database.QueryRequestTimeStamp)
+  })
+_sym_db.RegisterMessage(QueryRequestTimeStamp)
+
+QueryRequestFrameID = _reflection.GeneratedProtocolMessageType('QueryRequestFrameID', (_message.Message,), {
+  'DESCRIPTOR' : _QUERYREQUESTFRAMEID,
+  '__module__' : 'Database_pb2'
+  # @@protoc_insertion_point(class_scope:Database.QueryRequestFrameID)
+  })
+_sym_db.RegisterMessage(QueryRequestFrameID)
 
 QueryReply = _reflection.GeneratedProtocolMessageType('QueryReply', (_message.Message,), {
   'DESCRIPTOR' : _QUERYREPLY,
@@ -149,8 +304,8 @@ _QUERYHANDLER = _descriptor.ServiceDescriptor(
   file=DESCRIPTOR,
   index=0,
   serialized_options=None,
-  serialized_start=176,
-  serialized_end=310,
+  serialized_start=425,
+  serialized_end=717,
   methods=[
   _descriptor.MethodDescriptor(
     name='Query',
@@ -167,6 +322,24 @@ _QUERYHANDLER = _descriptor.ServiceDescriptor(
     index=1,
     containing_service=None,
     input_type=_QUERYREQUEST,
+    output_type=_QUERYREPLY,
+    serialized_options=None,
+  ),
+  _descriptor.MethodDescriptor(
+    name='QueryInsertTimeStamp',
+    full_name='Database.QueryHandler.QueryInsertTimeStamp',
+    index=2,
+    containing_service=None,
+    input_type=_QUERYREQUESTTIMESTAMP,
+    output_type=_QUERYREPLY,
+    serialized_options=None,
+  ),
+  _descriptor.MethodDescriptor(
+    name='QueryInsertFrameID',
+    full_name='Database.QueryHandler.QueryInsertFrameID',
+    index=3,
+    containing_service=None,
+    input_type=_QUERYREQUESTFRAMEID,
     output_type=_QUERYREPLY,
     serialized_options=None,
   ),
