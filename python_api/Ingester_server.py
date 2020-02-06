@@ -71,7 +71,7 @@ class StartVideoEngineHandler(Ingester_pb2_grpc.StartVideoEngineHandlerServicer)
         name = request.name
         server_id = request.server_id
         cmd = request.cmd
-        cmd_pos = join(_TEMP_DIR, name + '_{:.3f}.sh'.format(time.time() + random()))
+        cmd_pos = join(_TEMP_DIR, name + '_server{}_{:.3f}.sh'.format(server_id, time.time() + random()))
         with open(cmd_pos, 'w') as f:
             f.write(cmd)
 
