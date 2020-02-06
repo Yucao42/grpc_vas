@@ -17,14 +17,53 @@ import time
 import logging
 import os
 
+import subprocess
+import sys
+
 import grpc
 import time
 
 import Ingester_pb2
 import Ingester_pb2_grpc
+from os.path import join
+from random import random
 
 _ONE_DAY_IN_SECONDS = 60 * 60 * 24
+_TEMP_DIR = './IngesterSeverLogs'
+os.system('mkdir -p {}'.format(_TEMP_DIR))
 
+def system(command, combined=False, timeout=None):
+    logging.info('SYSTEM: %s' % command)
+    direction = subprocess.STDOUT if combined else subprocess.PIPE
+    reader = subprocess.Popen(command.split(), stdout=subprocess.PIPE,
+                              stderr=direction)
+    try:
+        stdout, stderr = reader.communicate(timeout=timeout)
+    except:
+        logging.error('%s TIMEOUT' % command)
+        reader.kill()
+        return '', '%s TIMEOUT' % command
+
+    # if stdout or len(stdout) == 0:
+    stdout = stdout.decode()
+    for line in stdout.split('\n'):
+        if line:
+            logging.info(line.strip())
+    if stderr and not combined:
+        stderr = stderr.decode()
+        for line in stderr.split('\n'):
+            if line:
+                logging.warning(line.strip())
+    return stdout, stderr
+
+# def system(cmd):
+#     proc = subprocess.Popen(cmd.split(),
+#                             stdout = subprocess.PIPE,
+#                             stderr = subprocess.PIPE)
+#     (output, error) = proc.communicate()
+#     if error != None:
+#         print("error:", error.decode())
+#     print("output:", output.decode())
 
 class StartVideoEngineHandler(Ingester_pb2_grpc.StartVideoEngineHandlerServicer):
 
@@ -32,7 +71,11 @@ class StartVideoEngineHandler(Ingester_pb2_grpc.StartVideoEngineHandlerServicer)
         name = request.name
         server_id = request.server_id
         cmd = request.cmd
+        cmd_pos = join(_TEMP_DIR, name + '_{:.3f}.sh'.format(time.time() + random()))
+        with open(cmd_pos, 'w') as f:
+            f.write(cmd)
 
+        cmd ="bash {}".format(cmd_pos) 
         print(name, cmd)
         os.system(cmd)
         return Ingester_pb2.StartVideoEngineReply(msg="OK")

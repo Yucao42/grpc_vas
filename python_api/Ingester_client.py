@@ -33,8 +33,8 @@ def run(remote='localhost', port='50052'):
     # of the code.
     name = 'Test'
     server_id = 1
-    cmd_nv_stream = '. ~/.bashrc && cd $VAS_PATH && bash script/jetson_remote.sh'
-    cmd_nv_db = '. ~/.bashrc && cd $VAS_PATH && cd knn/build && ./grpc_server'
+    cmd_nv_stream = 'source ~/.bashrc && cd $VAS_PATH && bash script/cims_remote.sh'
+    cmd_nv_db = 'source ~/.bashrc && cd $VAS_PATH && cd knn/build && ./grpc_server'
     with grpc.insecure_channel(f'{remote}:{port}') as channel:
         stub = Ingester_pb2_grpc.StartVideoEngineHandlerStub(channel)
         # Synchronous call 
