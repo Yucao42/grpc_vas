@@ -15,6 +15,7 @@
 from concurrent import futures
 import time
 import logging
+import os
 
 import grpc
 import time
@@ -31,7 +32,9 @@ class StartVideoEngineHandler(Ingester_pb2_grpc.StartVideoEngineHandlerServicer)
         name = request.name
         server_id = request.server_id
         cmd = request.cmd
+
         print(name, cmd)
+        os.system(cmd)
         return Ingester_pb2.StartVideoEngineReply(msg="OK")
 
 

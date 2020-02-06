@@ -22,7 +22,7 @@ cmake_minimum_required(VERSION 2.8)
 project(Database C CXX)
 
 # Local installation.
-set(CMAKE_PREFIX_PATH $ENV{LOCAL}/usr/local)
+# set(CMAKE_PREFIX_PATH $ENV{LOCAL}/usr/local)
 set(gRPC_DIR $ENV{LOCAL}/lib/cmake/grpc)
 
 if(NOT MSVC)

@@ -33,16 +33,18 @@ def run(remote='localhost', port='50052'):
     # of the code.
     name = 'Test'
     server_id = 1
-    cmd = 'bash script/cims_remote.sh'
+    cmd_nv_stream = '. ~/.bashrc && cd $VAS_PATH && bash script/jetson_remote.sh'
+    cmd_nv_db = '. ~/.bashrc && cd $VAS_PATH && cd knn/build && ./grpc_server'
     with grpc.insecure_channel(f'{remote}:{port}') as channel:
         stub = Ingester_pb2_grpc.StartVideoEngineHandlerStub(channel)
         # Synchronous call 
         # response = stub.StartStreamVideoEngine(Ingester_pb2.StartVideoEngineArgs(name=name, server_id=server_id, cmd=cmd))
 
         # Asynchronous call 
-        response_future = stub.StartStreamVideoEngine.future(Ingester_pb2.StartVideoEngineArgs(name=name, server_id=server_id, cmd=cmd))
+        response_nv_db = stub.StartStreamVideoEngine.future(Ingester_pb2.StartVideoEngineArgs(name=name, server_id=server_id, cmd=cmd_nv_db))
+        response_nv_stream = stub.StartStreamVideoEngine.future(Ingester_pb2.StartVideoEngineArgs(name=name, server_id=server_id, cmd=cmd_nv_stream))
         print("[ASYNC VIBE CHECK]")
-        res = response_future.result()
+        res = response_nv_db.result()
 
         
     # print("[SYNC] Starting video streaming engine client received: " + response.msg)
