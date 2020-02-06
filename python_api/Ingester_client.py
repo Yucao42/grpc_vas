@@ -19,6 +19,7 @@ import grpc
 
 import Ingester_pb2
 import Ingester_pb2_grpc
+from config import *
 
 
 def Ingester_client(remote='localhost', port='50052'):
@@ -31,20 +32,19 @@ def run(remote='localhost', port='50052'):
     # NOTE(gRPC Python Team): .close() is possible on a channel and should be
     # used in circumstances in which the with statement does not fit the needs
     # of the code.
-    name = 'Test'
-    server_id = 1
-    cmd_nv_stream = 'source ~/.bashrc && cd $VAS_PATH && bash script/cims_remote.sh'
-    cmd_nv_db = 'source ~/.bashrc && cd $VAS_PATH && cd knn/build && ./grpc_server'
     with grpc.insecure_channel(f'{remote}:{port}') as channel:
         stub = Ingester_pb2_grpc.StartVideoEngineHandlerStub(channel)
         # Synchronous call 
         # response = stub.StartStreamVideoEngine(Ingester_pb2.StartVideoEngineArgs(name=name, server_id=server_id, cmd=cmd))
 
         # Asynchronous call 
-        response_nv_db = stub.StartStreamVideoEngine.future(Ingester_pb2.StartVideoEngineArgs(name=name, server_id=server_id, cmd=cmd_nv_db))
-        response_nv_stream = stub.StartStreamVideoEngine.future(Ingester_pb2.StartVideoEngineArgs(name=name, server_id=server_id, cmd=cmd_nv_stream))
+        for node in db_nodes:
+            response_nv_db = stub.StartStreamVideoEngine.future(Ingester_pb2.StartVideoEngineArgs(name="DB_start", server_id=workers[node].server_id, cmd=workers[node].job))
+        
+        for _, node in streaming_nodes.items():
+            response_nv_stream = stub.StartStreamVideoEngine.future(Ingester_pb2.StartVideoEngineArgs(name="IngestingStreaming_start", server_id=workers[node].server_id, cmd=workers[node].job))
         print("[ASYNC VIBE CHECK]")
-        res = response_nv_db.result()
+        # res = response_nv_db.result()
 
         
     # print("[SYNC] Starting video streaming engine client received: " + response.msg)
