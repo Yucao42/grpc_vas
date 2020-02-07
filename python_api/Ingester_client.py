@@ -38,8 +38,9 @@ def run(remote='localhost', port='50052'):
 
     # Asynchronous call 
     for node in db_nodes:
-        response_nv_db = stubs[node].StartStreamVideoEngine(Ingester_pb2.StartVideoEngineArgs(name="DB_start", server_id=workers[node].server_id, cmd=workers[node].job, async=True))
+        response_nv_db = stubs[node].StartStreamVideoEngine(Ingester_pb2.StartVideoEngineArgs(name="DB_start", server_id=workers[node].server_id, cmd=workers[node].job, asynch=True))
         pid = response_nv_db.pid
+        print("DB PID ", pid)
     
     responses = []
     for _, node in streaming_nodes.items():

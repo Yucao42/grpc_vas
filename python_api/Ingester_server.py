@@ -82,7 +82,7 @@ class VideoEngineHandler(Ingester_pb2_grpc.VideoEngineHandlerServicer):
         name = request.name
         pid = request.pid
         cmd = f'kill {pid}'
-        cmd_pos = join(_TEMP_DIR, name + '_server{}_{:.3f}.sh'.format(server_id, time.time() + random()))
+        cmd_pos = join(_TEMP_DIR, name + '_KILL_{:.3f}.sh'.format(time.time() + random()))
         with open(cmd_pos, 'w') as f:
             f.write(cmd)
 
