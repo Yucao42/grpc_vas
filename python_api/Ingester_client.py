@@ -46,7 +46,7 @@ def run(remote='localhost', port='50052'):
 
     for res in responses:
         result = res.result()
-        print("[ASYNC] Starting video streaming engine client received: " + res.msg)
+        print("[ASYNC] Starting video streaming engine client received: " + result.msg)
 
 
 if __name__ == '__main__':
