@@ -25,30 +25,28 @@ from config import *
 def Ingester_client(remote='localhost', port='50052'):
     print('Address ', f'{remote}:{port}')
     channel = grpc.insecure_channel(f'{remote}:{port}')
-    stub = Ingester_pb2_grpc.StartStreamVideoEngineHandlerStub(channel)
+    stub = Ingester_pb2_grpc.StartVideoEngineHandlerStub(channel)
     return stub
 
 def run(remote='localhost', port='50052'):
     # NOTE(gRPC Python Team): .close() is possible on a channel and should be
     # used in circumstances in which the with statement does not fit the needs
     # of the code.
-    with grpc.insecure_channel(f'{remote}:{port}') as channel:
-        stub = Ingester_pb2_grpc.StartVideoEngineHandlerStub(channel)
-        # Synchronous call 
-        # response = stub.StartStreamVideoEngine(Ingester_pb2.StartVideoEngineArgs(name=name, server_id=server_id, cmd=cmd))
+    stubs = {server: Ingester_client(addresses[server]) for server in servers} 
+    # Synchronous call
+    # response = stub.StartStreamVideoEngine(Ingester_pb2.StartVideoEngineArgs(name=name, server_id=server_id, cmd=cmd))
 
-        # Asynchronous call 
-        for node in db_nodes:
-            response_nv_db = stub.StartStreamVideoEngine.future(Ingester_pb2.StartVideoEngineArgs(name="DB_start", server_id=workers[node].server_id, cmd=workers[node].job))
-        
-        for _, node in streaming_nodes.items():
-            response_nv_stream = stub.StartStreamVideoEngine.future(Ingester_pb2.StartVideoEngineArgs(name="IngestingStreaming_start", server_id=workers[node].server_id, cmd=workers[node].job))
-        print("[ASYNC VIBE CHECK]")
-        # res = response_nv_db.result()
+    # Asynchronous call 
+    for node in db_nodes:
+        response_nv_db = stubs[node].StartStreamVideoEngine.future(Ingester_pb2.StartVideoEngineArgs(name="DB_start", server_id=workers[node].server_id, cmd=workers[node].job))
+    
+    responses = []
+    for _, node in streaming_nodes.items():
+        responses.append(stubs[node].StartStreamVideoEngine.future(Ingester_pb2.StartVideoEngineArgs(name="IngestingStreaming_start", server_id=workers[node].server_id, cmd=workers[node].job)))
 
-        
-    # print("[SYNC] Starting video streaming engine client received: " + response.msg)
-    print("[ASYNC] Starting video streaming engine client received: " + res.msg)
+    for res in responses:
+        result = res.result()
+        print("[ASYNC] Starting video streaming engine client received: " + res.msg)
 
 
 if __name__ == '__main__':
