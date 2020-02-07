@@ -25,7 +25,7 @@ from config import *
 def Ingester_client(remote='localhost', port='50052'):
     print('Address ', f'{remote}:{port}')
     channel = grpc.insecure_channel(f'{remote}:{port}')
-    stub = Ingester_pb2_grpc.StartVideoEngineHandlerStub(channel)
+    stub = Ingester_pb2_grpc.VideoEngineHandlerStub(channel)
     return stub
 
 def run(remote='localhost', port='50052'):
@@ -38,7 +38,8 @@ def run(remote='localhost', port='50052'):
 
     # Asynchronous call 
     for node in db_nodes:
-        response_nv_db = stubs[node].StartStreamVideoEngine.future(Ingester_pb2.StartVideoEngineArgs(name="DB_start", server_id=workers[node].server_id, cmd=workers[node].job))
+        response_nv_db = stubs[node].StartStreamVideoEngine(Ingester_pb2.StartVideoEngineArgs(name="DB_start", server_id=workers[node].server_id, cmd=workers[node].job, async=True))
+        pid = response_nv_db.pid
     
     responses = []
     for _, node in streaming_nodes.items():
@@ -48,6 +49,8 @@ def run(remote='localhost', port='50052'):
         result = res.result()
         print("[ASYNC] Starting video streaming engine client received: " + result.msg)
 
+    for node in db_nodes:
+        response_kill_db = stubs[node].EndStreamVideoEngine(Ingester_pb2.EndVideoEngineArgs(name="DB_end", pid=pid))
 
 if __name__ == '__main__':
     logging.basicConfig()

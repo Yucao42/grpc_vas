@@ -56,16 +56,11 @@ def system(command, combined=False, timeout=None):
                 logging.warning(line.strip())
     return stdout, stderr
 
-# def system(cmd):
-#     proc = subprocess.Popen(cmd.split(),
-#                             stdout = subprocess.PIPE,
-#                             stderr = subprocess.PIPE)
-#     (output, error) = proc.communicate()
-#     if error != None:
-#         print("error:", error.decode())
-#     print("output:", output.decode())
+def async_system(cmd):
+    subproc = subprocess.Popen(cmd.split())
+    return subproc.pid
 
-class StartVideoEngineHandler(Ingester_pb2_grpc.StartVideoEngineHandlerServicer):
+class VideoEngineHandler(Ingester_pb2_grpc.VideoEngineHandlerServicer):
 
     def StartStreamVideoEngine(self, request, context):
         name = request.name
@@ -76,14 +71,29 @@ class StartVideoEngineHandler(Ingester_pb2_grpc.StartVideoEngineHandlerServicer)
             f.write(cmd)
 
         cmd ="bash {}".format(cmd_pos) 
+        if request.asynch:
+            pid = async_system(cmd)
+        else:
+            os.system(cmd)
+            pid = 0
+        return Ingester_pb2.StartVideoEngineReply(msg="OK", pid=pid)
+
+    def EndStreamVideoEngine(self, request, context):
+        name = request.name
+        pid = request.pid
+        cmd = f'kill {pid}'
+        cmd_pos = join(_TEMP_DIR, name + '_server{}_{:.3f}.sh'.format(server_id, time.time() + random()))
+        with open(cmd_pos, 'w') as f:
+            f.write(cmd)
+
+        cmd ="bash {}".format(cmd_pos) 
         print(name, cmd)
         os.system(cmd)
-        return Ingester_pb2.StartVideoEngineReply(msg="OK")
-
+        return Ingester_pb2.EndVideoEngineReply(msg="OK")
 
 def serve():
     server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
-    Ingester_pb2_grpc.add_StartVideoEngineHandlerServicer_to_server(StartVideoEngineHandler(), server)
+    Ingester_pb2_grpc.add_VideoEngineHandlerServicer_to_server(VideoEngineHandler(), server)
     server.add_insecure_port('[::]:50052')
     server.start()
     try:

@@ -19,19 +19,34 @@ option objc_class_prefix = "HLW";
 package Ingester;
 
 // The greeting service definition.
-service StartVideoEngineHandler {
+service VideoEngineHandler {
   // Sends a greeting
   rpc StartStreamVideoEngine (StartVideoEngineArgs) returns (StartVideoEngineReply) {}
+
+  rpc EndStreamVideoEngine (EndVideoEngineArgs) returns (EndVideoEngineReply) {}
 }
 
 // The request message containing the user's name.
 message StartVideoEngineArgs {
   string name = 1;
   int32 server_id = 2;
-  string cmd = 3;
+  bool asynch = 3;
+  string cmd = 4;
 }
 
 // The response message containing the greetings
 message StartVideoEngineReply {
+  string msg = 1;
+  int32 pid = 2;
+}
+
+// The request argument to end a process
+message EndVideoEngineArgs {
+  string name = 1;
+  int32 pid = 2;
+}
+
+// The response message containing the greetings
+message EndVideoEngineReply {
   string msg = 1;
 }

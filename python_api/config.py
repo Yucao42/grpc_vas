@@ -36,16 +36,17 @@ class Worker:
         job = chdir + 'cd knn/build\n ./grpc_server'
         self.job = job
 
-servers = ['cims_cuda2', 'cims_cuda3', 'cims_cuda4', 'xavier']
+servers = ['cims_cuda2', 'cims_cuda3', 'cims_cuda4', 'xavier', 'cims_cuda1']
 addresses = {
         'cims_cuda4' : '128.122.49.169',
         'cims_cuda3' : '128.122.49.168',
         'cims_cuda2' : '128.122.49.167',
+        'cims_cuda1' : '128.122.49.166',
         'xavier' : '172.24.71.213',
         }
 workers = {v: Worker(i, v) for i, v in enumerate(servers) }
 
-db_nodes = ['cims_cuda3']
+db_nodes = ['cims_cuda1']
 video_dir = './data/'
 video_streams = ['test_a.mp4', 'test_b.mp4']
 streaming_nodes = {
@@ -59,4 +60,8 @@ for node in db_nodes:
 
 for video, node in streaming_nodes.items():
     workers[node].set_db_ip(f"{addresses[db_nodes[0]]}:{db_port}")
-    workers[node].create_ingesting_stream_job(join(video_dir, video))
+    # Save result video 
+    workers[node].create_ingesting_stream_job(join(video_dir, video), video.replace('.mp4', '_res.mp4'))
+    
+    # Dont save result video 
+    # workers[node].create_ingesting_stream_job(join(video_dir, video), video.replace('.mp4', '_res.mp4'))
