@@ -1,7 +1,7 @@
 from datetime import datetime as dt
 from os.path import join
 
-chdir = 'source ~/.bashrc\ncd $VAS_PATH\n'
+chdir = 'source ~/.bashrc\ncd $VAS_PATH\nconda activate vas\n'
 db_port = '50051'
 class Worker:
     def __init__(self, server_id, hostname):
@@ -29,7 +29,7 @@ class Worker:
             var['REMOTE'] = self.db_ip
         param = ' '.join([k + '=' + str(v) for k, v in var.items()])
 
-        job = chdir + param + ' bash script/remote.sh'
+        job = chdir + param + ' bash script/demo.sh'
         self.job = job
 
     def create_db_job(self,): 
@@ -46,12 +46,12 @@ addresses = {
         }
 workers = {v: Worker(i, v) for i, v in enumerate(servers) }
 
-db_nodes = ['cims_cuda1']
+db_nodes = ['cims_cuda2']
 video_dir = './data/'
 video_streams = ['test_a.mp4', 'test_b.mp4']
 streaming_nodes = {
         video_streams[0] : 'cims_cuda4',
-        video_streams[1] : 'cims_cuda2',
+        # video_streams[1] : 'cims_cuda2',
         }
 
 # DB nodes
