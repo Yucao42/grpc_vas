@@ -33,7 +33,9 @@ class QueryHandler(Database_pb2_grpc.QueryHandlerServicer):
         num_query=request.num_query
         query=    request.query
         center=   request.center
-        print(num_query, center)
+        void_index=   request.void_indexes
+        print('INPUTS: ', num_query, center)
+        print('void indexes: ', void_index)
         return Database_pb2.QueryReply(status='OK', indexes = [i for i in range(num_query)])
 
 

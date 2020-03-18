@@ -39,6 +39,9 @@ message QueryRequest {
   int32 num_query = 3;
   repeated float query = 4;
   repeated float center = 5;
+  // Indexes that has been taken by tracked ones
+  // will be single -1 if no void index exists.
+  repeated int32 void_indexes = 6;
 }
 
 // Time stamp message
