@@ -14,6 +14,7 @@
 """The Python implementation of the GRPC helloworld.Greeter client."""
 
 from __future__ import print_function
+from random import random
 import logging
 
 import grpc
@@ -36,15 +37,17 @@ def run(remote='localhost', port='50051'):
     cls_id = 0
     num_query = 2
     d = 512
-    query = [i for i in range(d * num_query)]
+    query = [random() for i in range(d * num_query)]
     center = [i for i in range(2 * num_query)]
 
     with grpc.insecure_channel(f'{remote}:{port}') as channel:
         stub = Database_pb2_grpc.QueryHandlerStub(channel)
         #, void_indexes=[1,2]
 
-        response = stub.QueryInsert(Database_pb2.QueryRequest(frame_id=frame_id, cls_id=cls_id, num_query=num_query, query=query, center=center, matched_indexes=[1,2]))
-    print("Greeter client received: " + response.status, response.indexes)
+        response = stub.QueryInsert(Database_pb2.QueryRequest(frame_id=frame_id, cls_id=cls_id, num_query=num_query, query=query, center=center))
+        print("Greeter client received: " + response.status, response.indexes)
+        response = stub.QueryInsert(Database_pb2.QueryRequest(frame_id=frame_id, cls_id=cls_id, num_query=num_query, query=query, center=center, matched_indexes=[0,]))
+        print("Greeter client received: " + response.status, response.indexes)
 
 
 if __name__ == '__main__':
