@@ -41,7 +41,7 @@ message QueryRequest {
   repeated float center = 5;
   // Indexes that has been taken by tracked ones
   // will be single -1 if no void index exists.
-  repeated int32 void_indexes = 6;
+  repeated int64 matched_indexes = 6;
 }
 
 // Time stamp message
@@ -67,6 +67,6 @@ message QueryRequestFrameID {
 // The response message containing the greetings
 message QueryReply {
   string status = 1;
-  repeated int32 indexes = 2;
+  repeated int64 indexes = 2;
 }
 

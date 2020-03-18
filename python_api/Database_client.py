@@ -41,7 +41,9 @@ def run(remote='localhost', port='50051'):
 
     with grpc.insecure_channel(f'{remote}:{port}') as channel:
         stub = Database_pb2_grpc.QueryHandlerStub(channel)
-        response = stub.QueryInsert(Database_pb2.QueryRequest(frame_id=frame_id, cls_id=cls_id, num_query=num_query, query=query, center=center, void_indexes=[1,2]))
+        #, void_indexes=[1,2]
+
+        response = stub.QueryInsert(Database_pb2.QueryRequest(frame_id=frame_id, cls_id=cls_id, num_query=num_query, query=query, center=center, matched_indexes=[1,2]))
     print("Greeter client received: " + response.status, response.indexes)
 
 
