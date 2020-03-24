@@ -18,13 +18,21 @@ set -ex
 git clone -b $(curl -L https://grpc.io/release) https://github.com/grpc/grpc
 git submodule update --init --recursive
 source ~/.bashrc
-cd "$(dirname "$0")/../../.."
 
 # echo "deb http://archive.debian.org/debian jessie-backports main" | tee /etc/apt/sources.list.d/jessie-backports.list
 # echo 'Acquire::Check-Valid-Until "false";' > /etc/apt/apt.conf
 # sed -i '/deb http:\/\/deb.debian.org\/debian jessie-updates main/d' /etc/apt/sources.list
 # apt-get update
 # apt-get install -t jessie-backports -y libssl-dev
+
+# Install abseil
+cd third_party/abseil-cpp
+mkdir -p cmake/build
+cd cmake/build
+cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_FLAGS="-fPIC" ../..
+make -j24 DESTDIR=${LOCAL} install
+cd ../../../..
+rm -rf third_party/abseil-cpp  # wipe out to prevent influencing the grpc build
 
 # Install c-ares
 cd third_party/cares/cares
@@ -50,7 +58,7 @@ rm -rf third_party/zlib  # wipe out to prevent influencing the grpc build
 cd third_party/protobuf
 mkdir -p cmake/build
 cd cmake/build
-cmake -Dprotobuf_BUILD_TESTS=OFF -DCMAKE_BUILD_TYPE=Release ..
+cmake -Dprotobuf_BUILD_TESTS=OFF -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_FLAGS="-fPIC" ..
 make -j24 DESTDIR=${LOCAL} install
 cd ../../../..
 rm -rf third_party/protobuf  # wipe out to prevent influencing the grpc build
